@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+	<title>Reservations Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+	<!-- <link rel="stylesheet" type="text/css" href="assets/css/style.css"> -->
+</head>
+	
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			  <h1 class="text-center"><i class="fab fa-hotjar"></i></span> Hot Restaurant</h1>
+     		<hr>
+     		<h2 class="text-center">Make your reservation</h2>
+    		 <br>
+			<div class="text-center">
+      	 		<a href="/tables"><button type="button" class="btn btn-lg btn-primary"><i class="far fa-list-alt"></i> View Tables</button></a>
+       			<a href="/"><button type="button" class="btn btn-lg btn-outline-secondary light"><i class="fas fa-home"></i> Home</button></a>
+     		</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="card" >
+			<div class="card-header">
+				<h4>Table Reservations</h4>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="form-group">
+					<label for="customerName">Name</label>
+					<input type="form-group" class="form-control customerName" id="searchTerm customerName">
+					</div>
+					<div class="form-group">
+					<label for="customerPhone">Phone Number</label>
+					<input type="form-group" class="form-control customerPhone" id="searchTerm customerPhone">
+					</div>
+					<div class="form-group">
+					<label for="customerEmail">Email</label>
+					<input type="form-group" class="form-control customerEmail" id="searchTerm customerEmail">
+					</div>
+					<div class="form-group">
+					<label for="customerId">Unique ID</label>
+					<input type="form-group" class="form-control customerId" id="searchTerm customerId">
+					</div>
+					<button type="button-search" class="btn btn-secondary submit"><i class="fas fa-search"></i> Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer class="footer">
+		<div class="container">
+			<p><a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a> | <a href="https://github.com/2crazyflowers/HotRestaurant">GitHub Repo</a></p>
+		</div>
+	</footer>
+</body>
+</html>
+
+<script type="text/javascript">
+
+	
+	$(".submit").on("click", function(event) {
+		event.preventDefault();
+
+		var newReservations = {
+			customerName: $(".customerName").val(),
+			customerPhone: $(".customerPhone").val(),
+			customerEmail: $(".customerEmail").val(),
+			customerId: $(".customerId").val()
+		};
+
+		console.log(newReservations);
+
+		$.post("/api/tables", newReservations, function(data) {
+			if (data) {
+				alert("You are offically booked for a table!");
+			}
+
+			else {
+				alert("You are on the wait list, please be patient.");
+			}
+
+			$(".customerName").val("");
+    		$(".customerPhone").val("");
+    		$(".customerEmail").val("");
+    		$(".customerId").val("");
+		});
+
+	});
+
+</script>

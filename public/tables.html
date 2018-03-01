@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+	<title>Table Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+  <!-- <link rel="stylesheet" type="text/css" href="assets/css/style.css"> -->
+</head>
+	
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <h1 class="text-center"><i class="fab fa-hotjar"></i> Hot Restaurant</h1>
+      <hr>
+      <h2 class="text-center">We only have 5 tables! Book your seat before they all are gone!</h2>
+      <br>
+      <div class="text-center">
+      <a href="/"><button type="button" class="btn btn-lg btn-outline-secondary"><i class="fas fa-home"></i> Home</button></a>
+      <a href="/reserve"><button type="button" class="btn btn-lg btn-danger"><i class="far fa-credit-card"></i></span> Make Reservation</button></a>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h4>Current Reservations</h4>
+      </div>
+      <div class="card-body" id="tableSection">
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h4>Waiting List</h4>
+      </div>
+      <div class="card-body" id="waitSection">
+      </div>
+    </div>
+  </div>
+  <br>
+  <footer class="footer">
+    <div class="container">
+      <p><a href="#" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a> | <a href="https://github.com/2crazyflowers/HotRestaurant">GitHub Repo</a></p>
+    </div>
+  </footer>
+</body>
+</html>
+
+
+<script type="text/javascript">
+  function runTableQuery () {
+    //this pulls the origin of the window location of where the user is right now
+    //this allows us to use the same code when deployed to heroku
+    var currentURL = window.location.origin;
+
+    //this does an ajax call on the tables api and gets the data from there
+    //could use .get from starwars too, or instead
+     $.ajax({ url: currentURL + "/api/tables", method: "GET"})
+      .then(function(tableData) {
+        console.log("------------------------------------");
+        console.log("URL: " + currentURL + "/api/tables");
+        console.log("------------------------------------");
+        console.log(tableData);
+        console.log("------------------------------------");
+
+        for (var i=0; i < tableData.length; i++) {
+          console.log(tableData[i]);
+
+          var tableSection = $("<div>");
+          tableSection.addClass('well');
+          tableSection.attr('id', 'tableWell-' + i+1);
+          $('#tableSection').append(tableSection);
+
+          var tableNumber = i + 1;
+          $('#tableWell-' + i+1).append('<h5><span class="badge badge-primary">' + tableNumber + "</span> | " + tableData[i].customerId + "</h5>");
+        }
+
+
+      });
+  }
+
+  function runWaitQuery () {
+    //this pulls the origin of the window location of where the user is right now
+    //this allows us to use the same code when deployed to heroku
+    var currentURL = window.location.origin;
+
+    //this does an ajax call on the tables api and gets the data from there
+    //could use .get from starwars too, or instead
+     $.ajax({ url: currentURL + "/api/waitlist", method: "GET"})
+      .then(function(waitinglistData) {
+        console.log("------------------------------------");
+        console.log("URL: " + currentURL + "/api/waitlist");
+        console.log("------------------------------------");
+        console.log(waitinglistData);
+        console.log("------------------------------------");
+
+        for (var i=0; i < waitinglistData.length; i++) {
+          console.log(waitinglistData[i]);
+
+          var waitSection = $("<div>");
+          waitSection.addClass('well');
+          waitSection.attr('id', 'waitWell-' + i+1);
+          $('#waitSection').append(waitSection);
+
+          var waitNumber = i + 1;
+          $('#waitWell-' + i+1).append('<h5><span class="badge badge-primary">' + waitNumber + "</span> | " + waitinglistData[i].customerId + "</h5>");
+    
+        }
+        
+
+      });
+  }
+
+  function clearTable() {
+
+      var currentURL = window.location.origin;
+      $.ajax({ url: currentURL + "/api/clear", method: "POST" });
+
+  }
+
+  $("#clear").on("click", function() {
+    alert("Clearing...");
+    clearTable();
+
+    // Refresh the page after data is cleared
+    location.reload();
+
+    });
+
+runTableQuery();
+runWaitQuery();
+
+</script>
