@@ -13,7 +13,7 @@ module.exports = function(app) {
 		res.json(waitingListData);
 	});
 
-	app.post('api/tables', function(req, res) {
+	app.post('/api/tables', function(req, res) {
 		if(tableData.length < 5) {
 			console.log('app.post tables less than 5')
 			tableData.push(req.body);

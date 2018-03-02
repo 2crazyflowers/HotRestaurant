@@ -13,7 +13,8 @@ module.exports = function (app) {
 		res.sendFile(path.join(__dirname, '/../public/reserve.html'));
 	});
 //if you are using app and go to any other url other than reserve or table you go to home page
-	app.use( function(req, res) {
+//need to use root so stuff doesn't get lost
+	app.get("/", function(req, res) {
 		res.sendFile(path.join(__dirname, '/../public/home.html'));
 	});
 }
